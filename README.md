@@ -1,2 +1,3 @@
 # CafeQueue
- simple frontend + backend project, where the whole point is to simulate a cafe chain with monitors where orders are either being prepared, prepared, handed out...
+
+Frontend + Backend project for simulating a cafe chain that displays orders and their status.
