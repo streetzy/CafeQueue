@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from "react";
 
-function index() {
+export default function Index() {
+  const [unpreparedOrders, setUnpreparedOrders] = useState([]);
+  const [preparedOrders, setPreparedOrders] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [prompt, setPrompt] = useState("");
+
   return (
     <div className="h-screen w-screen">
+      {prompt === "addLocation" && (
+        <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
+          <p></p>
+        </div>
+      )}
+      {prompt === "addOrder" && <div></div>}
+      {prompt === "prepareOrder" && <div></div>}
+      {prompt === "pickUpOrder" && <div></div>}
+
       <div className=" h-full w-full flex flex-col justify-center items-center gap-5 py-5">
         {/* Viewing Panel */}
         <div className="w-9/12 h-5/6 border-[2px] rounded-3xl border-[#38211e] flex flex-row overflow-hidden shadow-[0_0_8px_#301d1e]">
@@ -50,18 +64,31 @@ function index() {
         {/* Admin Panel */}
         <div className="flex flex-row w-9/12 h-1/6 border-[2px] border-[#38211e] overflow-hidden rounded-3xl shadow-[0_0_8px_#301d1e]">
           {/* Add location */}
-          <button className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+          <button
+            onClick={() => setPrompt("addLocation")}
+            className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
             ADD LOCATION
           </button>
           {/* Add order */}
-          <button className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+          <button
+            onClick={() => setPrompt("addOrder")}
+            className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
             ADD ORDER
           </button>
           {/* Order prepared for pickup */}
-          <button className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+          <button
+            onClick={() => setPrompt("prepareOrder")}
+            className="border-r-[2px] border-[#38211e] p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
             ORDER PREPARED
           </button>
-          <button className="p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+          {/* Order picked up */}
+          <button
+            onClick={() => setPrompt("pickUpOrder")}
+            className="p-0 w-1/4 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
             ORDER PICKED UP
           </button>
         </div>
@@ -69,5 +96,3 @@ function index() {
     </div>
   );
 }
-
-export default index;
