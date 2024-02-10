@@ -10,12 +10,148 @@ export default function Index() {
     <div className="h-screen w-screen">
       {prompt === "addLocation" && (
         <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
-          <p></p>
+          <div className="justify-center w-full h-1/4 flex justify-center items-center">
+            <p className="text-4xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              ADD LOCATION
+            </p>
+          </div>
+          <div className="flex flex-col w-full h-2/4 gap-3 items-center">
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Location Name:
+            </p>
+            <input
+              type="text"
+              name="locationName"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter location name..."
+            />
+          </div>
+          <div className="h-1/4 w-full flex justify-center items-center">
+            <button
+              onClick={() => setPrompt("")}
+              className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
+            >
+              Done
+            </button>
+          </div>
         </div>
       )}
-      {prompt === "addOrder" && <div></div>}
-      {prompt === "prepareOrder" && <div></div>}
-      {prompt === "pickUpOrder" && <div></div>}
+      {prompt === "addOrder" && (
+        <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
+          <div className="justify-center w-full h-1/4 flex justify-center items-center">
+            <p className="text-4xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              ADD ORDER
+            </p>
+          </div>
+          <div className="flex flex-col w-full h-2/4 gap-3 items-center">
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Order Description:
+            </p>
+            <input
+              type="text"
+              name="orderDescription"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter order description..."
+            />
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Location Number:
+            </p>
+            <input
+              type="number"
+              min="1"
+              name="locationNumber"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter location number..."
+            />
+          </div>
+          <div className="h-1/4 w-full flex justify-center items-center">
+            <button
+              onClick={() => setPrompt("")}
+              className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+      {prompt === "prepareOrder" && (
+        <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
+          <div className="justify-center w-full h-1/4 flex justify-center items-center">
+            <p className="text-4xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              PREPARE ORDER
+            </p>
+          </div>
+          <div className="flex flex-col w-full h-2/4 gap-3 items-center">
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Order Number
+            </p>
+            <input
+              type="number"
+              min="1"
+              name="preparedOrderNumber"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter order number..."
+            />
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Location Number
+            </p>
+            <input
+              type="number"
+              min="1"
+              name="preparedLocationNumber"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter location number..."
+            />
+          </div>
+          <div className="h-1/4 w-full flex justify-center items-center">
+            <button
+              onClick={() => setPrompt("")}
+              className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+      {prompt === "pickUpOrder" && (
+        <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
+          <div className="justify-center w-full h-1/4 flex justify-center items-center">
+            <p className="text-4xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              PICK UP ORDER
+            </p>
+          </div>
+          <div className="flex flex-col w-full h-2/4 gap-3 items-center">
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Order Number
+            </p>
+            <input
+              type="number"
+              min="1"
+              name="pickedUpOrderNumber"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter order number..."
+            />
+            <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Location Number
+            </p>
+            <input
+              type="number"
+              min="1"
+              name="pickedUpLocationNumber"
+              className="w-3/4 h-1/6 text-center text-3xl"
+              placeholder="Enter location number..."
+            />
+          </div>
+          <div className="h-1/4 w-full flex justify-center items-center">
+            <button
+              onClick={() => setPrompt("")}
+              className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className=" h-full w-full flex flex-col justify-center items-center gap-5 py-5">
         {/* Viewing Panel */}
