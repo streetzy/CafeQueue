@@ -4,12 +4,12 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-  })
-);
+app.use(cors());
 
-app.listen(3000, () => {
+app.get("/api/v1/", (req, res) => {
+  res.json();
+});
+
+app.listen(8000, () => {
   console.log("Backend running");
 });
