@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 export default function Index() {
-  const [unpreparedOrders, setUnpreparedOrders] = useState([]);
-  const [preparedOrders, setPreparedOrders] = useState([]);
-  const [locations, setLocations] = useState([]);
   const [prompt, setPrompt] = useState("");
+
   return (
     <div className="h-screen w-screen">
       {prompt === "addLocation" && (
@@ -28,19 +26,17 @@ export default function Index() {
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
               onClick={async () => {
-                await fetch("http://localhost:8000/locations/:locationID", {
+                await fetch("http://localhost:8080/locations", {
                   headers: {
                     "Content-Type": "text/plain",
                   },
                   mode: "cors",
                   method: "POST",
-                  body: `${
-                    (
-                      document.getElementById(
-                        "addedLocationName"
-                      ) as HTMLInputElement
-                    ).value
-                  }`,
+                  body: `${(
+                    document.getElementById(
+                      "addedLocationName"
+                    ) as HTMLInputElement
+                  ).value.toLowerCase()}`,
                 });
                 setPrompt("");
               }}
@@ -72,20 +68,27 @@ export default function Index() {
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
               onClick={async () => {
-                await fetch("http://localhost:8000/locations/:locationID", {
-                  headers: {
-                    "Content-Type": "text/plain",
-                  },
-                  mode: "cors",
-                  method: "DELETE",
-                  body: `${
-                    (
-                      document.getElementById(
-                        "deleteLocationName"
-                      ) as HTMLInputElement
-                    ).value
-                  }`,
-                });
+                await fetch(
+                  `http://localhost:8080/locations/${(
+                    document.getElementById(
+                      "deleteLocationName"
+                    ) as HTMLInputElement
+                  ).value.toLowerCase()}`,
+                  {
+                    headers: {
+                      "Content-Type": "text/plain",
+                    },
+                    mode: "cors",
+                    method: "DELETE",
+                    body: `${
+                      (
+                        document.getElementById(
+                          "deleteLocationName"
+                        ) as HTMLInputElement
+                      ).value
+                    }`,
+                  }
+                );
                 setPrompt("");
               }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
@@ -113,40 +116,38 @@ export default function Index() {
               placeholder="Enter order description..."
             />
             <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-              Location Number:
+              Location Name:
             </p>
             <input
-              type="number"
-              min="1"
-              name="locationNumber"
+              type="text"
+              id="orderLocationName"
               className="w-3/4 h-1/6 text-center text-3xl"
-              placeholder="Enter location number..."
+              placeholder="Enter location name..."
             />
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
               onClick={async () => {
                 await fetch(
-                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  `http://localhost:8080/locations/${(
+                    document.getElementById(
+                      "orderLocationName"
+                    ) as HTMLInputElement
+                  ).value.toLowerCase()}/orders`,
                   {
                     headers: {
                       "Content-Type": "text/plain",
                     },
                     mode: "cors",
                     method: "POST",
-                    body: `${[
+                    body: JSON.stringify([
                       (
                         document.getElementById(
                           "orderDescription"
                         ) as HTMLInputElement
                       ).value,
-                      (
-                        document.getElementById(
-                          "locationNumber"
-                        ) as HTMLInputElement
-                      ).value,
                       false,
-                    ]}`,
+                    ]),
                   }
                 );
                 setPrompt("");
@@ -167,7 +168,7 @@ export default function Index() {
           </div>
           <div className="flex flex-col w-full h-2/4 gap-3 items-center">
             <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-              Order Number
+              Order Number:
             </p>
             <input
               type="number"
@@ -177,40 +178,37 @@ export default function Index() {
               placeholder="Enter order number..."
             />
             <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-              Location Number
+              Location Name:
             </p>
             <input
-              type="number"
-              min="1"
-              id="preparedLocationNumber"
+              type="text"
+              id="preparedLocationName"
               className="w-3/4 h-1/6 text-center text-3xl"
-              placeholder="Enter location number..."
+              placeholder="Enter location name..."
             />
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
               onClick={async () => {
                 await fetch(
-                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  `http://localhost:8080/locations/${(
+                    document.getElementById(
+                      "preparedLocationName"
+                    ) as HTMLInputElement
+                  ).value.toLowerCase()}/orders/${
+                    (
+                      document.getElementById(
+                        "preparedOrderNumber"
+                      ) as HTMLInputElement
+                    ).value
+                  }`,
                   {
                     headers: {
                       "Content-Type": "text/plain",
                     },
                     mode: "cors",
                     method: "POST",
-                    body: `${[
-                      (
-                        document.getElementById(
-                          "preparedOrderNumber"
-                        ) as HTMLInputElement
-                      ).value,
-                      (
-                        document.getElementById(
-                          "preparedLocationNumber"
-                        ) as HTMLInputElement
-                      ).value,
-                      true,
-                    ]}`,
+                    body: `${true}`,
                   }
                 );
                 setPrompt("");
@@ -231,7 +229,7 @@ export default function Index() {
           </div>
           <div className="flex flex-col w-full h-2/4 gap-3 items-center">
             <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-              Order Number
+              Order Number:
             </p>
             <input
               type="number"
@@ -241,28 +239,37 @@ export default function Index() {
               placeholder="Enter order number..."
             />
             <p className="text-3xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-              Location Number
+              Location Name:
             </p>
             <input
-              type="number"
-              min="1"
-              id="pickedUpLocationNumber"
+              type="text"
+              id="pickedUpLocationName"
               className="w-3/4 h-1/6 text-center text-3xl"
-              placeholder="Enter location number..."
+              placeholder="Enter location name..."
             />
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
               onClick={async () => {
                 await fetch(
-                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  `http://localhost:8080/locations/${(
+                    document.getElementById(
+                      "pickedUpLocationName"
+                    ) as HTMLInputElement
+                  ).value.toLowerCase()}/orders/${
+                    (
+                      document.getElementById(
+                        "pickedUpOrderNumber"
+                      ) as HTMLInputElement
+                    ).value
+                  }`,
                   {
                     headers: {
                       "Content-Type": "text/plain",
                     },
                     mode: "cors",
                     method: "DELETE",
-                    body: `${[
+                    body: JSON.stringify([
                       (
                         document.getElementById(
                           "pickedUpOrderNumber"
@@ -270,11 +277,11 @@ export default function Index() {
                       ).value,
                       (
                         document.getElementById(
-                          "pickedUpLocationNumber"
+                          "pickedUpLocationName"
                         ) as HTMLInputElement
                       ).value,
                       true,
-                    ]}`,
+                    ]),
                   }
                 );
                 setPrompt("");

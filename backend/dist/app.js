@@ -12,28 +12,36 @@ import { deleteLocationOrder } from "./endpoints/deleteLocationOrder.js";
 import { patchLocationOrder } from "./endpoints/patchLocationOrder.js";
 const app = express();
 const database = { locations: [] };
+export function checkLocation(db, req) {
+    const restaurantLocation = db.locations.find((location) => location.name === req.params.locationName);
+    if (restaurantLocation == undefined)
+        return false;
+    return true;
+}
 //ENDPOINTS:
 // GET /locations
 // GET /locations/:locationID
-// ADD /locations/:locationID
+// ADD /locations
 // DELETE /locations/:locationID
 // GET /locations/:locationID/orders
 // GET /locations/:locationID/orders/:orderID
-// ADD /locations/:locationID/orders/:orderID
+// ADD /locations/:locationID/orders
 // PATCH /locations/:locationID/orders/:orderID     only occurs if an order is prepared
 // DELETE /locations/:locationID/orders/:orderID
 // editing locations makes no sense, so it's not going to be implemented
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:8080/", "http://localhost:3000"],
+}));
 app.use(bodyParser.text());
 app.get("/locations", (req, res) => getLocations(req, res, database));
-app.get("/locations/:locationID", (req, res) => getLocation(req, res, database));
-app.post("/locations/:locationID", (req, res) => addLocation(req, res, database));
-app.delete("/locations/:locationID", (req, res) => deleteLocation(req, res, database));
-app.get("/locations/:locationID/orders", (req, res) => getLocationOrders(req, res, database));
-app.get("locations/:locationID/orders/:orderID", (req, res) => getLocationOrder(req, res, database));
-app.post("/locations/:locationID/orders/:orderID", (req, res) => addLocationOrder(req, res, database));
-app.patch("/locations/:locationID/orders/:orderID", (req, res) => patchLocationOrder(req, res, database));
-app.delete("/locations/:locationID/orders/:orderID", (req, res) => deleteLocationOrder(req, res, database));
-app.listen(8000, () => {
+app.get("/locations/:locationName", (req, res) => getLocation(req, res, database));
+app.post("/locations", (req, res) => addLocation(req, res, database));
+app.delete("/locations/:locationName", (req, res) => deleteLocation(req, res, database));
+app.get("/locations/:locationName/orders", (req, res) => getLocationOrders(req, res, database));
+app.get("locations/:locationName/orders/:orderID", (req, res) => getLocationOrder(req, res, database));
+app.post("/locations/:locationName/orders", (req, res) => addLocationOrder(req, res, database));
+app.patch("/locations/:locationName/orders/:orderID", (req, res) => patchLocationOrder(req, res, database));
+app.delete("/locations/:locationName/orders/:orderID", (req, res) => deleteLocationOrder(req, res, database));
+app.listen(8080, () => {
     console.log("Backend is running");
 });
