@@ -1,1 +1,12 @@
-export function patchLocationOrder(req, res, database) { }
+export function patchLocationOrder(req, res, database) {
+    const restaurantLocation = database.locations.find((location) => location.name === req.params.locationName);
+    if (restaurantLocation == undefined) {
+        return res.status(404).send("Invalid location");
+    }
+    const requestedOrder = restaurantLocation.orders.find((order) => order.id == +req.params.orderID);
+    if (requestedOrder == undefined) {
+        return res.status(404).send("Invalid order id");
+    }
+    database.locations[database.locations.indexOf(restaurantLocation)].orders[restaurantLocation.orders.indexOf(requestedOrder)].isPrepared = true;
+    res.status(200).send("OK");
+}

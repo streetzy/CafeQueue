@@ -1,7 +1,7 @@
-import { checkLocation } from "../app.js";
 export function addLocationOrder(req, res, database) {
     const parsedBody = JSON.parse(req.body);
-    if (checkLocation(database, req)) {
+    const restaurantLocation = database.locations.find((location) => location.name === req.params.locationName);
+    if (restaurantLocation == undefined) {
         return res.status(404).send("Invalid location");
     }
     const data = {

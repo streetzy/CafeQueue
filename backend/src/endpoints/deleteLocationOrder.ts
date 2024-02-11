@@ -24,5 +24,6 @@ export function deleteLocationOrder(
   database.locations[
     database.locations.indexOf(restaurantLocation)
   ].orders.splice(restaurantLocation.orders.indexOf(requestedOrder), 1);
+
   res.status(200).send("OK");
 }

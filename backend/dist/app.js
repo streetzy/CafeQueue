@@ -12,12 +12,6 @@ import { deleteLocationOrder } from "./endpoints/deleteLocationOrder.js";
 import { patchLocationOrder } from "./endpoints/patchLocationOrder.js";
 const app = express();
 const database = { locations: [] };
-export function checkLocation(db, req) {
-    const restaurantLocation = db.locations.find((location) => location.name === req.params.locationName);
-    if (restaurantLocation == undefined)
-        return false;
-    return true;
-}
 //ENDPOINTS:
 // GET /locations
 // GET /locations/:locationID

@@ -207,7 +207,7 @@ export default function Index() {
                       "Content-Type": "text/plain",
                     },
                     mode: "cors",
-                    method: "POST",
+                    method: "PATCH",
                     body: `${true}`,
                   }
                 );
