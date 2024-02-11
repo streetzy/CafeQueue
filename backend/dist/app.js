@@ -9,6 +9,7 @@ import { getLocationOrders } from "./endpoints/getLocationOrders.js";
 import { getLocationOrder } from "./endpoints/getLocationOrder.js";
 import { addLocationOrder } from "./endpoints/addLocationOrder.js";
 import { deleteLocationOrder } from "./endpoints/deleteLocationOrder.js";
+import { patchLocationOrder } from "./endpoints/patchLocationOrder.js";
 const app = express();
 const database = { locations: [] };
 //ENDPOINTS:
@@ -19,8 +20,9 @@ const database = { locations: [] };
 // GET /locations/:locationID/orders
 // GET /locations/:locationID/orders/:orderID
 // ADD /locations/:locationID/orders/:orderID
+// PATCH /locations/:locationID/orders/:orderID     only occurs if an order is prepared
 // DELETE /locations/:locationID/orders/:orderID
-// editing orders makes no sense, so it is not going to be implemented
+// editing locations makes no sense, so it's not going to be implemented
 app.use(cors());
 app.use(bodyParser.text());
 app.get("/locations", (req, res) => getLocations(req, res, database));
@@ -30,6 +32,7 @@ app.delete("/locations/:locationID", (req, res) => deleteLocation(req, res, data
 app.get("/locations/:locationID/orders", (req, res) => getLocationOrders(req, res, database));
 app.get("locations/:locationID/orders/:orderID", (req, res) => getLocationOrder(req, res, database));
 app.post("/locations/:locationID/orders/:orderID", (req, res) => addLocationOrder(req, res, database));
+app.patch("/locations/:locationID/orders/:orderID", (req, res) => patchLocationOrder(req, res, database));
 app.delete("/locations/:locationID/orders/:orderID", (req, res) => deleteLocationOrder(req, res, database));
 app.listen(8000, () => {
     console.log("Backend is running");

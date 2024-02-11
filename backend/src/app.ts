@@ -10,6 +10,7 @@ import { getLocationOrder } from "./endpoints/getLocationOrder.js";
 import { addLocationOrder } from "./endpoints/addLocationOrder.js";
 import { deleteLocationOrder } from "./endpoints/deleteLocationOrder.js";
 import { Database } from "./databaseTypes.js";
+import { patchLocationOrder } from "./endpoints/patchLocationOrder.js";
 
 const app = express();
 
@@ -23,8 +24,9 @@ const database: Database = { locations: [] };
 // GET /locations/:locationID/orders
 // GET /locations/:locationID/orders/:orderID
 // ADD /locations/:locationID/orders/:orderID
+// PATCH /locations/:locationID/orders/:orderID     only occurs if an order is prepared
 // DELETE /locations/:locationID/orders/:orderID
-// editing orders makes no sense, so it is not going to be implemented
+// editing locations makes no sense, so it's not going to be implemented
 
 app.use(cors());
 app.use(bodyParser.text());
@@ -49,6 +51,10 @@ app.get("locations/:locationID/orders/:orderID", (req, res) =>
 app.post("/locations/:locationID/orders/:orderID", (req, res) =>
   addLocationOrder(req, res, database)
 );
+app.patch("/locations/:locationID/orders/:orderID", (req, res) =>
+  patchLocationOrder(req, res, database)
+);
+
 app.delete("/locations/:locationID/orders/:orderID", (req, res) =>
   deleteLocationOrder(req, res, database)
 );

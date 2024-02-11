@@ -71,7 +71,23 @@ export default function Index() {
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
-              onClick={() => setPrompt("")}
+              onClick={async () => {
+                await fetch("http://localhost:8000/locations/:locationID", {
+                  headers: {
+                    "Content-Type": "text/plain",
+                  },
+                  mode: "cors",
+                  method: "DELETE",
+                  body: `${
+                    (
+                      document.getElementById(
+                        "deleteLocationName"
+                      ) as HTMLInputElement
+                    ).value
+                  }`,
+                });
+                setPrompt("");
+              }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
               Done
@@ -109,7 +125,32 @@ export default function Index() {
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
-              onClick={() => setPrompt("")}
+              onClick={async () => {
+                await fetch(
+                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  {
+                    headers: {
+                      "Content-Type": "text/plain",
+                    },
+                    mode: "cors",
+                    method: "POST",
+                    body: `${[
+                      (
+                        document.getElementById(
+                          "orderDescription"
+                        ) as HTMLInputElement
+                      ).value,
+                      (
+                        document.getElementById(
+                          "locationNumber"
+                        ) as HTMLInputElement
+                      ).value,
+                      false,
+                    ]}`,
+                  }
+                );
+                setPrompt("");
+              }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
               Done
@@ -148,7 +189,32 @@ export default function Index() {
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
-              onClick={() => setPrompt("")}
+              onClick={async () => {
+                await fetch(
+                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  {
+                    headers: {
+                      "Content-Type": "text/plain",
+                    },
+                    mode: "cors",
+                    method: "POST",
+                    body: `${[
+                      (
+                        document.getElementById(
+                          "preparedOrderNumber"
+                        ) as HTMLInputElement
+                      ).value,
+                      (
+                        document.getElementById(
+                          "preparedLocationNumber"
+                        ) as HTMLInputElement
+                      ).value,
+                      true,
+                    ]}`,
+                  }
+                );
+                setPrompt("");
+              }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
               Done
@@ -187,7 +253,32 @@ export default function Index() {
           </div>
           <div className="h-1/4 w-full flex justify-center items-center">
             <button
-              onClick={() => setPrompt("")}
+              onClick={async () => {
+                await fetch(
+                  "http://localhost:8000/locations/:locationID/orders/:orderID",
+                  {
+                    headers: {
+                      "Content-Type": "text/plain",
+                    },
+                    mode: "cors",
+                    method: "DELETE",
+                    body: `${[
+                      (
+                        document.getElementById(
+                          "pickedUpOrderNumber"
+                        ) as HTMLInputElement
+                      ).value,
+                      (
+                        document.getElementById(
+                          "pickedUpLocationNumber"
+                        ) as HTMLInputElement
+                      ).value,
+                      true,
+                    ]}`,
+                  }
+                );
+                setPrompt("");
+              }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
               Done

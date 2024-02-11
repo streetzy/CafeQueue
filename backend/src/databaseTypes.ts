@@ -1,6 +1,7 @@
 export type Order = {
   id: number;
   description: string;
+  isPrepared: boolean;
 };
 
 export type RestaurantLocation = {
