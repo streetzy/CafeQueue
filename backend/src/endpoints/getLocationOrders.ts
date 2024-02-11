@@ -13,5 +13,5 @@ export function getLocationOrders(
     return res.status(404).send("Invalid location");
   }
 
-  res.send(JSON.stringify(restaurantLocation.orders));
+  res.json(restaurantLocation.orders);
 }

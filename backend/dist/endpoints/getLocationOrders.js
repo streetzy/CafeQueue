@@ -3,5 +3,5 @@ export function getLocationOrders(req, res, database) {
     if (restaurantLocation == undefined) {
         return res.status(404).send("Invalid location");
     }
-    res.send(JSON.stringify(restaurantLocation.orders));
+    res.json(restaurantLocation.orders);
 }

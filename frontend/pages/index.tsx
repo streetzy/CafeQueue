@@ -1,7 +1,39 @@
 import React, { useEffect, useState } from "react";
 
+export type Order = {
+  id: number;
+  description: string;
+  isPrepared: boolean;
+};
+
+export type RestaurantLocation = {
+  id: number;
+  name: string;
+  orders: Order[];
+};
+
 export default function Index() {
   const [prompt, setPrompt] = useState("");
+  const [locations, setLocations] = useState<RestaurantLocation[]>([]);
+  const [update, setUpdate] = useState(false);
+
+  useEffect(() => {
+    const fetchLocationsData = async () => {
+      await fetch("http://localhost:8080/locations")
+        .then((res) => res.json())
+        .then((data) => {
+          setLocations(data);
+          console.log(data);
+        });
+    };
+
+    fetchLocationsData();
+  }, [update]);
+
+  // To refresh useEffect when there is an interaction with the backend.
+  function invertUpdateBool() {
+    return setUpdate(!update);
+  }
 
   return (
     <div className="h-screen w-screen">
@@ -90,6 +122,7 @@ export default function Index() {
                   }
                 );
                 setPrompt("");
+                invertUpdateBool();
               }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
@@ -151,6 +184,7 @@ export default function Index() {
                   }
                 );
                 setPrompt("");
+                invertUpdateBool();
               }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
@@ -212,6 +246,7 @@ export default function Index() {
                   }
                 );
                 setPrompt("");
+                invertUpdateBool();
               }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
@@ -222,7 +257,7 @@ export default function Index() {
       )}
       {prompt === "pickUpOrder" && (
         <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
-          <div className="justify-center w-full h-1/4 flex justify-center items-center">
+          <div className="justify-center w-full h-1/4 flex items-center">
             <p className="text-4xl text-[#ecdfe0] font-bold leading-none [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
               PICK UP ORDER
             </p>
@@ -285,12 +320,53 @@ export default function Index() {
                   }
                 );
                 setPrompt("");
+                invertUpdateBool();
               }}
               className="w-1/4 h-1/2 bg-[#4a2c29] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1"
             >
               Done
             </button>
           </div>
+        </div>
+      )}
+      {prompt === "viewAll" && (
+        <div className="w-full h-full bg-[#5B3739] absolute border-[2px] rounded-3xl border-[#38211e] flex flex-col">
+          <div className="h-1/6 w-full flex justify-center items-center">
+            <p className="text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+              Viewing Panel
+            </p>
+          </div>
+          <div className="h-4/6 w-full border-[2px] rounded-3xl border-[#38211e] shadow-[0_0_8px_#301d1e] flex flex-col gap-1 overflow-y-auto">
+            {locations != undefined &&
+              locations.map((location, index) => (
+                <div key={index}>
+                  <details className="w-full bg-[#4a2c29] border border-[#38211e] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1 pl-4">
+                    <summary>{location.name.toUpperCase()}</summary>
+                    <p className="pl-3">
+                      Location identifier is: {location.id}
+                    </p>
+                    {location.orders.map((order, index) => (
+                      <details
+                        key={index}
+                        className="w-full bg-[#4a2c29] border border-[#38211e] text-[#ecdfe0] text-3xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1 pl-4"
+                      >
+                        <summary>{order.id}</summary>
+                        <p className="w-full h-full bg-[#4a2c29] border border-[#38211e] text-[#ecdfe0] text-xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1 pl-4">
+                          Description: {order.description}, is the food
+                          prepared: {`${order.isPrepared}`}
+                        </p>
+                      </details>
+                    ))}
+                  </details>
+                </div>
+              ))}
+          </div>
+          <button
+            onClick={() => setPrompt("")}
+            className="text-4xl h-1/6 w-full text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
+            Close Panel
+          </button>
         </div>
       )}
 
@@ -323,7 +399,25 @@ export default function Index() {
               </div>
             </div>
             {/* Actual orders themselves */}
-            <div className="w-full h-5/6 bg-[#503031]"></div>
+            <div className="w-full h-5/6 bg-[#503031] overflow-y-auto">
+              {locations != undefined &&
+                locations
+                  .filter((location) => location.orders.length != 0)
+                  .map((location) =>
+                    location.orders
+                      .filter((order) => !order.isPrepared)
+                      .map((order, index) => (
+                        <div key={index} className="flex">
+                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                            {order.id}
+                          </p>
+                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                            {location.id}
+                          </p>
+                        </div>
+                      ))
+                  )}
+            </div>
           </div>
 
           {/* Prepared */}
@@ -353,7 +447,25 @@ export default function Index() {
               </div>
             </div>
             {/* Actual prepared orders */}
-            <div className="h-5/6 w-full bg-[#503031]"></div>
+            <div className="h-5/6 w-full bg-[#503031] overflow-y-auto">
+              {locations != undefined &&
+                locations
+                  .filter((location) => location.orders.length != 0)
+                  .map((location) =>
+                    location.orders
+                      .filter((order) => order.isPrepared)
+                      .map((order, index) => (
+                        <div key={index} className="flex">
+                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                            {order.id}
+                          </p>
+                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                            {location.id}
+                          </p>
+                        </div>
+                      ))
+                  )}
+            </div>
           </div>
         </div>
         {/* Admin Panel */}
@@ -361,37 +473,43 @@ export default function Index() {
           {/* Add location */}
           <button
             onClick={() => setPrompt("addLocation")}
-            className="border-r-[2px] border-[#38211e] p-0 w-1/5 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+            className="border-r-[2px] border-[#38211e] p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
           >
             ADD LOCATION
           </button>
           {/* Delete location */}
           <button
             onClick={() => setPrompt("deleteLocation")}
-            className="border-r-[2px] border-[#38211e] p-0 w-1/5 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+            className="border-r-[2px] border-[#38211e] p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
           >
             DELETE LOCATION
           </button>
           {/* Add order */}
           <button
             onClick={() => setPrompt("addOrder")}
-            className="border-r-[2px] border-[#38211e] p-0 w-1/5 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+            className="border-r-[2px] border-[#38211e] p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
           >
             ADD ORDER
           </button>
           {/* Order prepared for pickup */}
           <button
             onClick={() => setPrompt("prepareOrder")}
-            className="border-r-[2px] border-[#38211e] p-0 w-1/5 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+            className="border-r-[2px] border-[#38211e] p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
           >
             ORDER PREPARED
           </button>
           {/* Order picked up */}
           <button
             onClick={() => setPrompt("pickUpOrder")}
-            className="p-0 w-1/5 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+            className="border-r-[2px] border-[#38211e] p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
           >
             ORDER PICKED UP
+          </button>
+          <button
+            onClick={() => setPrompt("viewAll")}
+            className="p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+          >
+            VIEW ALL
           </button>
         </div>
       </div>

@@ -12,7 +12,6 @@ export function deleteLocation(
   if (restaurantLocation == undefined) {
     return res.status(404).send("Invalid location");
   }
-
   database.locations.splice(database.locations.indexOf(restaurantLocation), 1);
   res.status(200).send("OK");
 }

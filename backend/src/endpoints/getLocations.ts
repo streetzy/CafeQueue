@@ -4,5 +4,5 @@ import { Database } from "../databaseTypes.js";
 export function getLocations(req: Request, res: Response, database: Database) {
   const restaurantLocations = database.locations;
 
-  res.send(JSON.stringify(restaurantLocations));
+  res.json(restaurantLocations);
 }
