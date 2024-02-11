@@ -7,6 +7,8 @@ export function patchLocationOrder(req, res, database) {
     if (requestedOrder == undefined) {
         return res.status(404).send("Invalid order id");
     }
+    // Goes thru database, takes the restaurant location in the locations arr, then takes the requested
+    // order from the orders arr, and sets its prepared state to true.
     database.locations[database.locations.indexOf(restaurantLocation)].orders[restaurantLocation.orders.indexOf(requestedOrder)].isPrepared = true;
     res.status(200).send("OK");
 }

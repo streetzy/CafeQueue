@@ -17,6 +17,7 @@ export default function Index() {
   const [locations, setLocations] = useState<RestaurantLocation[]>([]);
   const [update, setUpdate] = useState(false);
 
+  // Every time the user interacts w/ buttons, we gain data from the server about locations and save that
   useEffect(() => {
     const fetchLocationsData = async () => {
       await fetch("http://localhost:8080/locations")
@@ -37,6 +38,12 @@ export default function Index() {
 
   return (
     <div className="h-screen w-screen">
+      {/* Prompts, i.e. when the administrator clicks a button, some sort of interface is brought up */}
+      {/* For the first few buttons w/ fetches, the format goes something along:
+          Get inputs from the administrator, send that over to the backend via values from the inputs 
+          (in some cases false/true for the prepared state for the order)
+          These buttons also invert the update bool for the useEffect.
+      */}
       {prompt === "addLocation" && (
         <div className="w-1/2 h-1/2 bg-[#5B3739] absolute top-1/4 left-1/4 border-[2px] rounded-3xl border-[#38211e] flex flex-col">
           <div className="justify-center w-full h-1/4 flex justify-center items-center">
@@ -329,6 +336,10 @@ export default function Index() {
           </div>
         </div>
       )}
+      {/* 
+        Opens a viewing panel where the administrator sees every location with dropdowns of every location
+        dropdowns of every order, every dropdown has descriptions about each item.
+      */}
       {prompt === "viewAll" && (
         <div className="w-full h-full bg-[#5B3739] absolute border-[2px] rounded-3xl border-[#38211e] flex flex-col">
           <div className="h-1/6 w-full flex justify-center items-center">
@@ -337,6 +348,10 @@ export default function Index() {
             </p>
           </div>
           <div className="h-4/6 w-full border-[2px] rounded-3xl border-[#38211e] shadow-[0_0_8px_#301d1e] flex flex-col gap-1 overflow-y-auto">
+            {/* Checks that the locations array exists
+                goes through every location, creates a div for every location, w/ the dropdown, does the same for orders
+                every dropdown has details about said item
+            */}
             {locations != undefined &&
               locations.map((location, index) => (
                 <div key={index}>
@@ -371,7 +386,7 @@ export default function Index() {
       )}
 
       <div className=" h-full w-full flex flex-col justify-center items-center gap-5 py-5">
-        {/* Viewing Panel */}
+        {/* Viewing Panel for users */}
         <div className="w-9/12 h-5/6 border-[2px] rounded-3xl border-[#38211e] flex flex-row overflow-hidden shadow-[0_0_8px_#301d1e]">
           <div className="w-6/12 h-full border-r-[2px] border-[#38211e]">
             {/* Titles */}
@@ -398,7 +413,11 @@ export default function Index() {
                 </div>
               </div>
             </div>
-            {/* Actual orders themselves */}
+            {/* Actual orders themselves
+                Ensures that no locations w/out any orders are shown
+                Then goes thru every location, gets its orders that AREN'T prepared
+                Then w/ every order a div is written out w/ the order id its location id
+            */}
             <div className="w-full h-5/6 bg-[#503031] overflow-y-auto">
               {locations != undefined &&
                 locations
@@ -447,6 +466,9 @@ export default function Index() {
               </div>
             </div>
             {/* Actual prepared orders */}
+            {/* Almost identical chunk of code as the unprepared orders, only difference is
+                that here we are checking if the orders are prepared
+            */}
             <div className="h-5/6 w-full bg-[#503031] overflow-y-auto">
               {locations != undefined &&
                 locations
@@ -505,6 +527,7 @@ export default function Index() {
           >
             ORDER PICKED UP
           </button>
+          {/* View all orders and locations and details about these */}
           <button
             onClick={() => setPrompt("viewAll")}
             className="p-0 w-1/6 bg-[#5B3739] text-[#ecdfe0] text-4xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"

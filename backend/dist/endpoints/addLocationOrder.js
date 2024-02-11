@@ -1,5 +1,6 @@
 export function addLocationOrder(req, res, database) {
     const parsedBody = JSON.parse(req.body);
+    // goes thru every location in the database to find the one requested by the admin
     const restaurantLocation = database.locations.find((location) => location.name === req.params.locationName);
     if (restaurantLocation == undefined) {
         return res.status(404).send("Invalid location");

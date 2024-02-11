@@ -12,6 +12,11 @@ import { deleteLocationOrder } from "./endpoints/deleteLocationOrder.js";
 import { patchLocationOrder } from "./endpoints/patchLocationOrder.js";
 const app = express();
 const database = { locations: [] };
+// SOME endpoints (listed below this comment) were not used, but they'll be kept just in case for future-proofing (even though I will probably never touch this project again ;)
+// Said endpoints are:
+// GET /locations/:locationID
+// GET /locations/:locationID/orders
+// GET /locations/:locationID/orders/:orderID
 //ENDPOINTS:
 // GET /locations
 // GET /locations/:locationID
@@ -23,10 +28,14 @@ const database = { locations: [] };
 // PATCH /locations/:locationID/orders/:orderID     only occurs if an order is prepared
 // DELETE /locations/:locationID/orders/:orderID
 // editing locations makes no sense, so it's not going to be implemented
+// editing DESCRIPTIONS of orders makes no sense, so it's not going to be implemented
 app.use(cors({
+    //one for backend 8080, one for frontend 3000
     origin: ["http://localhost:8080/", "http://localhost:3000"],
 }));
 app.use(bodyParser.text());
+// Each endpoint leads to its own script/function, some (as described above) are unused; however, but could be implemented
+// in the future.
 app.get("/locations", (req, res) => getLocations(req, res, database));
 app.get("/locations/:locationName", (req, res) => getLocation(req, res, database));
 app.post("/locations", (req, res) => addLocation(req, res, database));
