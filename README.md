@@ -4,6 +4,8 @@ Frontend + Backend project for simulating a cafe chain that displays orders and 
 
 http://localhost:3000 for frontend
 
+Might need to npm install in CafeQueue, frontend, backend
+
 cd frontend, npm run dev
 cd backend, npm run start
 
