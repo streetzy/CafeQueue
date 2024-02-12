@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 export type Order = {
   id: number;
@@ -16,7 +16,8 @@ export default function Index() {
   const [prompt, setPrompt] = useState("");
   const [locations, setLocations] = useState<RestaurantLocation[]>([]);
   const [update, setUpdate] = useState(false);
-
+  const [selectedLocation, setSelectedLocation] =
+    useState<RestaurantLocation>();
   // Every time the user interacts w/ buttons, we gain data from the server about locations and save that
   useEffect(() => {
     const fetchLocationsData = async () => {
@@ -386,8 +387,49 @@ export default function Index() {
       )}
 
       <div className=" h-full w-full flex flex-col justify-center items-center gap-5 py-5">
+        {/* Show current location and enable dropdown to choose location */}
+        <div className="bg-[#5B3739] w-9/12 h-1/6 border-[2px] rounded-3xl border-[#38211e] flex flex-row overflow-hidden shadow-[0_0_8px_#301d1e] items-center justify-center">
+          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+            Current location:{" "}
+            {selectedLocation == undefined
+              ? "None"
+              : `${selectedLocation.name.toUpperCase()}`}
+          </p>
+          <div className="flex flex-1 h-full w-full justify-center items-center">
+            <select className="flex-1 h-1/4 text-xl" id="locationToSelect">
+              {locations != undefined &&
+                locations.map((location, index) => (
+                  <option
+                    className="text-center"
+                    key={index}
+                    value={location.name}
+                  >
+                    {location.name.toUpperCase()}
+                  </option>
+                ))}
+            </select>
+            <button
+              className="flex-1 p-0 bg-[#5B3739] rounded-3xl border-[2px] border-[#38211e] text-[#ecdfe0] text-4xl font-bold shadow-[0_0_8px_#301d1e] [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+              onClick={() => {
+                let locationToSelect = (
+                  document.getElementById(
+                    "locationToSelect"
+                  ) as HTMLInputElement
+                ).value;
+                setSelectedLocation(
+                  locations.find(
+                    (location) => location.name == locationToSelect
+                  )
+                );
+              }}
+            >
+              SUBMIT
+            </button>
+          </div>
+        </div>
+
         {/* Viewing Panel for users */}
-        <div className="w-9/12 h-5/6 border-[2px] rounded-3xl border-[#38211e] flex flex-row overflow-hidden shadow-[0_0_8px_#301d1e]">
+        <div className="w-9/12 h-4/6 border-[2px] rounded-3xl border-[#38211e] flex flex-row overflow-hidden shadow-[0_0_8px_#301d1e]">
           <div className="w-6/12 h-full border-r-[2px] border-[#38211e]">
             {/* Titles */}
             <div className="flex flex-col w-full h-1/6 border-b-[2px] border-[#38211e]">
@@ -397,18 +439,12 @@ export default function Index() {
                   PREPARING
                 </p>
               </div>
-              {/* Order & Location */}
+              {/* Order & Location location isn't implemented, this code should be remade, but for time's sake I'll do it another time */}
               <div className="w-full h-1/2 flex flex-row">
                 {/* Order */}
-                <div className="w-1/2 h-full flex justify-center items-center border-r-[2px] border-[#704241] bg-[#5B3739]">
+                <div className="w-full h-full flex justify-center items-center border-[#704241] bg-[#5B3739]">
                   <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     ORDER NUMBER
-                  </p>
-                </div>
-                {/* Location */}
-                <div className="w-1/2 h-full flex justify-center items-center bg-[#5B3739]">
-                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                    LOCATION NUMBER
                   </p>
                 </div>
               </div>
@@ -419,23 +455,17 @@ export default function Index() {
                 Then w/ every order a div is written out w/ the order id its location id
             */}
             <div className="w-full h-5/6 bg-[#503031] overflow-y-auto">
-              {locations != undefined &&
-                locations
-                  .filter((location) => location.orders.length != 0)
-                  .map((location) =>
-                    location.orders
-                      .filter((order) => !order.isPrepared)
-                      .map((order, index) => (
-                        <div key={index} className="flex">
-                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                            {order.id}
-                          </p>
-                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                            {location.id}
-                          </p>
-                        </div>
-                      ))
-                  )}
+              {selectedLocation != undefined &&
+                selectedLocation.orders
+                  .filter((order) => !order.isPrepared)
+                  .map((order, index) => (
+                    <p
+                      key={index}
+                      className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+                    >
+                      {order.id}
+                    </p>
+                  ))}
             </div>
           </div>
 
@@ -449,18 +479,12 @@ export default function Index() {
                   PREPARED
                 </p>
               </div>
-              {/* Order & Location */}
+              {/* Order & Location same thing with the one above */}
               <div className="w-full h-1/2 flex flex-row">
                 {/* Order */}
-                <div className="w-1/2 h-full flex justify-center items-center border-r-[2px] border-[#704241] bg-[#5B3739]">
+                <div className="w-full h-full flex justify-center items-center border-[#704241] bg-[#5B3739]">
                   <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     ORDER NUMBER
-                  </p>
-                </div>
-                {/* Location */}
-                <div className="w-1/2 h-full flex justify-center items-center bg-[#5B3739]">
-                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                    LOCATION NUMBER
                   </p>
                 </div>
               </div>
@@ -470,23 +494,17 @@ export default function Index() {
                 that here we are checking if the orders are prepared
             */}
             <div className="h-5/6 w-full bg-[#503031] overflow-y-auto">
-              {locations != undefined &&
-                locations
-                  .filter((location) => location.orders.length != 0)
-                  .map((location) =>
-                    location.orders
-                      .filter((order) => order.isPrepared)
-                      .map((order, index) => (
-                        <div key={index} className="flex">
-                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                            {order.id}
-                          </p>
-                          <p className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
-                            {location.id}
-                          </p>
-                        </div>
-                      ))
-                  )}
+              {selectedLocation != undefined &&
+                selectedLocation.orders
+                  .filter((order) => order.isPrepared)
+                  .map((order, index) => (
+                    <p
+                      key={index}
+                      className="text-center flex-1 text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]"
+                    >
+                      {order.id}
+                    </p>
+                  ))}
             </div>
           </div>
         </div>
