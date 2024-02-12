@@ -365,10 +365,10 @@ export default function Index() {
                         key={index}
                         className="w-full bg-[#4a2c29] border border-[#38211e] text-[#ecdfe0] text-3xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1 pl-4"
                       >
-                        <summary>{order.id}</summary>
+                        <summary>Order {order.id}</summary>
                         <p className="w-full h-full bg-[#4a2c29] border border-[#38211e] text-[#ecdfe0] text-xl font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)] rounded-3xl pb-1 pl-4">
-                          Description: {order.description}, is the food
-                          prepared: {`${order.isPrepared}`}
+                          Description: {order.description}, the order is
+                          {order.isPrepared ? "" : " not"} prepared.
                         </p>
                       </details>
                     ))}
@@ -401,13 +401,13 @@ export default function Index() {
               <div className="w-full h-1/2 flex flex-row">
                 {/* Order */}
                 <div className="w-1/2 h-full flex justify-center items-center border-r-[2px] border-[#704241] bg-[#5B3739]">
-                  <p className="text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     ORDER NUMBER
                   </p>
                 </div>
                 {/* Location */}
                 <div className="w-1/2 h-full flex justify-center items-center bg-[#5B3739]">
-                  <p className="text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     LOCATION NUMBER
                   </p>
                 </div>
@@ -453,13 +453,13 @@ export default function Index() {
               <div className="w-full h-1/2 flex flex-row">
                 {/* Order */}
                 <div className="w-1/2 h-full flex justify-center items-center border-r-[2px] border-[#704241] bg-[#5B3739]">
-                  <p className="text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     ORDER NUMBER
                   </p>
                 </div>
                 {/* Location */}
                 <div className="w-1/2 h-full flex justify-center items-center bg-[#5B3739]">
-                  <p className="text-4xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
+                  <p className="text-3xl text-[#ecdfe0] leading-none font-bold [text-shadow:_0_1px_0_rgb(245_239_240_/_40%)]">
                     LOCATION NUMBER
                   </p>
                 </div>
